@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {useEffect, useState} from 'react';
 import { Global } from '@emotion/react';
 import { styled } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -8,6 +9,8 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import { FoundStationCard } from '../FoundStationCard/FoundStationCard';
+import { StationDTO } from '../../../../types/stationDTO';
+import { GetHardcodedStationsList } from '../../../../API_Requests/StationRequests';
 
 const drawerBleeding = 56;
 
@@ -45,6 +48,13 @@ export default function SwipeableEdgeDrawer(props: Props) {
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen);
   };
+
+  const [stationsList, setStationsList] = useState<StationDTO[]>();
+  useEffect(()=>{
+    GetHardcodedStationsList().then((res) => {
+      setStationsList(res);
+    })
+  }, [])
 
   // This is used only for the example
   const container = window !== undefined ? () => window().document.body : undefined;
@@ -97,9 +107,11 @@ export default function SwipeableEdgeDrawer(props: Props) {
             overflow: 'auto',
           }}
         >
+          {stationsList && stationsList.map((station) => 
+          <FoundStationCard {...station}/>)}
+          {/* <FoundStationCard base='לוטם' buildingName='ויזידיה' contactName="עמרי ג'נאח" contactPhone={"0503300100"} officeNumber={301} timeRange={"12:00-19:00"} locationDetails={'ישר בכיכר, ימינה בשקם ושמאלה לפני החד"א'}/>
           <FoundStationCard base='לוטם' buildingName='ויזידיה' contactName="עמרי ג'נאח" contactPhone={"0503300100"} officeNumber={301} timeRange={"12:00-19:00"} locationDetails={'ישר בכיכר, ימינה בשקם ושמאלה לפני החד"א'}/>
-          <FoundStationCard base='לוטם' buildingName='ויזידיה' contactName="עמרי ג'נאח" contactPhone={"0503300100"} officeNumber={301} timeRange={"12:00-19:00"} locationDetails={'ישר בכיכר, ימינה בשקם ושמאלה לפני החד"א'}/>
-          <FoundStationCard base='לוטם' buildingName='ויזידיה' contactName="עמרי ג'נאח" contactPhone={"0503300100"} officeNumber={301} timeRange={"12:00-19:00"} locationDetails={'ישר בכיכר, ימינה בשקם ושמאלה לפני החד"א'}/>
+          <FoundStationCard base='לוטם' buildingName='ויזידיה' contactName="עמרי ג'נאח" contactPhone={"0503300100"} officeNumber={301} timeRange={"12:00-19:00"} locationDetails={'ישר בכיכר, ימינה בשקם ושמאלה לפני החד"א'}/> */}
         </StyledBox>
       </SwipeableDrawer>
     </Root>
