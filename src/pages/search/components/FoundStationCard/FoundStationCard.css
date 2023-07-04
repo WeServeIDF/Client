@@ -1,0 +1,11 @@
+.found-station-card--container{
+    border: 2px solid pink;
+    padding: 3px;
+    margin: 0px;
+}
+
+.found-station-card--container > p{
+    color: royalblue;
+    margin: 0;
+    direction: rtl;
+}
