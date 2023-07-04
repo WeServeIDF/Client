@@ -15,11 +15,7 @@ import { GetHardcodedStationsList } from '../../../../API_Requests/StationReques
 const drawerBleeding = 56;
 
 interface Props {
-  /**
-   * Injected by the documentation to work in an iframe.
-   * You won't need it on your project.
-   */
-  window?: () => Window;
+  stations: StationDTO[]
 }
 
 const Root = styled('div')(({ theme }) => ({
@@ -43,21 +39,13 @@ const Puller = styled(Box)(({ theme }) => ({
 }));
 
 export default function SwipeableEdgeDrawer(props: Props) {
-  const { window } = props;
   const [open, setOpen] = React.useState(false);
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen);
   };
 
-  const [stationsList, setStationsList] = useState<StationDTO[]>();
-  useEffect(()=>{
-    GetHardcodedStationsList().then((res) => {
-      setStationsList(res);
-    })
-  }, [])
+  
 
-  // This is used only for the example
-  const container = window !== undefined ? () => window().document.body : undefined;
 
   return (
     <Root>
@@ -74,7 +62,6 @@ export default function SwipeableEdgeDrawer(props: Props) {
         <Button onClick={toggleDrawer(true)}>Open</Button>
       </Box>
       <SwipeableDrawer
-        container={container}
         anchor="bottom"
         open={open}
         onClose={toggleDrawer(false)}
@@ -97,7 +84,7 @@ export default function SwipeableEdgeDrawer(props: Props) {
           }}
         >
           <Puller />
-          <Typography sx={{ p: 2, color: 'text.secondary' }}>51 results</Typography>
+          <Typography style={{direction: 'rtl'}} sx={{ p: 2, color: 'text.secondary' }}>{props.stations.length} תוצאות</Typography>
         </StyledBox>
         <StyledBox
           sx={{
@@ -107,7 +94,7 @@ export default function SwipeableEdgeDrawer(props: Props) {
             overflow: 'auto',
           }}
         >
-          {stationsList && stationsList.map((station) => 
+          {props.stations && props.stations.map((station) => 
           <FoundStationCard {...station}/>)}
           {/* <FoundStationCard base='לוטם' buildingName='ויזידיה' contactName="עמרי ג'נאח" contactPhone={"0503300100"} officeNumber={301} timeRange={"12:00-19:00"} locationDetails={'ישר בכיכר, ימינה בשקם ושמאלה לפני החד"א'}/>
           <FoundStationCard base='לוטם' buildingName='ויזידיה' contactName="עמרי ג'נאח" contactPhone={"0503300100"} officeNumber={301} timeRange={"12:00-19:00"} locationDetails={'ישר בכיכר, ימינה בשקם ושמאלה לפני החד"א'}/>
